@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react'
-import {fetchEmployeeThunk} from "../store/thunks"
+import {fetchEmployeeThunk,deleteTaskThunk} from "../store/thunks"
 import { useSelector,useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
 
@@ -10,6 +10,9 @@ const SingleEmployee = () => {
   useEffect(()=>{
     dispatch(fetchEmployeeThunk(id))
   },[id])
+  const handledelete = (id) => {
+    dispatch(deleteTaskThunk(id))
+  } 
   return (
     <div>
       <h1>{employee.first_name} {employee.last_name}</h1>
@@ -18,7 +21,8 @@ const SingleEmployee = () => {
       <ul>
         {employee.tasks.map((task)=>{
           return <li key = {task.id}>
-            {task.description}
+           <span>{task.description}</span>
+           <button onClick={()=>handledelete(task.id)}>Delete</button>
           </li>
         })}
       </ul>
