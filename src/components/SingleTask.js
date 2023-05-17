@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import {fetchTaskThunk, fetchAllEmployeesThunk, editTaskThunk}from "../store/thunks"
 import { useSelector,useDispatch } from 'react-redux'
-import { useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 
 const SingleTask = () => {
   const navigate = useNavigate()
@@ -25,7 +25,7 @@ const SingleTask = () => {
       setCompletion_status(task.completion_status)
 
     }
-  }, [id,task.id])
+  }, [id,task])
   const handlesubmit =  (event) => {
     event.preventDefault()
     console.log("testing")
@@ -34,10 +34,13 @@ const SingleTask = () => {
     
   }
   return (
-    <div>
+    <div className='page'>
+       <div className='Goback'>
+        <Link to={"/tasks"}>Go Back</Link>
+      </div>
       <h1>{task.description}</h1>
       <p>Priority Level  : {task.priority_level}</p>
-      <h4>Assigned to {task.employee_id ? `${task.employee.first_name} ${task.employee.last_name}` : 'unassigned' }</h4>
+      <h4>Assigned to {task.employee_id ? <Link to={`/employees/${task.employee_id}`}> {`${task.employee.first_name} ${task.employee.last_name}`}</Link> : 'unassigned' }</h4>
       <form onSubmit={handlesubmit}>
         <h3> Edit Task</h3>
         <div>

@@ -8,6 +8,8 @@ const Tasks = () => {
   const [description,setDescription] = useState("")
   const [priority_level,setPriority_level] = useState("")
   const [employee_id,setEmployee_id] = useState("")
+  const [error,setError] = useState("")
+  const [priority_error,setpriorityerror] = useState("")
   const tasks = useSelector((state)=>state.allTasks)
   const employees = useSelector((state)=>state.allEmployees)
   useEffect(()=>{
@@ -19,6 +21,14 @@ const Tasks = () => {
   } 
   const handlesubmit = (event) => {
     event.preventDefault()
+    if(!description ) {
+      setError("Description is required")
+      return
+    }
+    if(!priority_level ) {
+      setpriorityerror("Priority is required")
+      return
+    }
     console.log("testing")
     dispatch(addTaskThunk({description,priority_level ,employee_id : employee_id ? employee_id : null}))
     setDescription("")
@@ -26,7 +36,10 @@ const Tasks = () => {
     setEmployee_id("")
   }
   return (
-    <div>
+    <div className='page'>
+       <div className='Goback'>
+        <Link to={"/"}>Go Back</Link>
+      </div>
       <h1> All Tasks </h1>
       {tasks.length > 0 ? (
         
@@ -43,7 +56,7 @@ const Tasks = () => {
         </thead>
         <tbody>
           {tasks.map((task)=>{
-            return <tr key={task.id}>
+            return <tr className='row' key={task.id}>
               <td>{task.description}</td>
               <td>{task.priority_level}</td>
               <td>{task.employee_id ? `${task.employee.first_name} ${task.employee.last_name}` : 'unassigned' }</td>
@@ -59,11 +72,13 @@ const Tasks = () => {
         <h3> Add New Task</h3>
         <div>
           <label>Description</label>
-          <input type='text' value = {description} onChange={(event)=>setDescription(event.target.value)}/>
+          <input type='text' value = {description} onFocus={(event)=>setError("")} onChange={(event)=>setDescription(event.target.value)}/>
+          {error && <span>{error}</span>}
         </div>
         <div>
           <label>Priority Level</label>
-          <input type='number' value = {priority_level} onChange={(event)=>setPriority_level(event.target.value)}/>
+          <input type='number' value = {priority_level} onFocus={(event)=> setpriorityerror("")} onChange={(event)=>setPriority_level(event.target.value)}/>
+          {priority_error && <span>{priority_error}</span>}
         </div>
         <div>
           <label>Employee</label>
